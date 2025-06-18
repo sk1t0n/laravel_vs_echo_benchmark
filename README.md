@@ -22,3 +22,6 @@ docker-compose up
 docker-compose down --volumes
 ```
 
+## Conclusion
+
+Golang is 47 times faster than PHP on a €5/mo VPS.
