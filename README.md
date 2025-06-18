@@ -1,0 +1,22 @@
+# laravel_vs_echo_benchmark
+
+This project compares the performance and functionality of the Laravel PHP framework and the Golang microframework Echo. The example used is a simple CRUD API.
+
+I wanted to find libraries for Golang to write less code almost like in PHP. For example for pagination I found [upper/db](https://github.com/upper/db).
+
+Everything is run through Docker Compose with a single command. For load testing I used [hey](https://github.com/rakyll/hey).
+
+![screenshot](screenshot.png)
+
+## Start
+
+```sh
+docker-compose up
+```
+
+## Stop
+
+```sh 
+docker-compose down --volumes
+```
+
