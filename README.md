@@ -8,6 +8,8 @@ Everything is run through Docker Compose with a single command. For load testing
 
 ![screenshot](screenshot.png)
 
+![screenshot2](screenshot2.png)
+
 ## Start
 
 ```sh
