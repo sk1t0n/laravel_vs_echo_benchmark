@@ -1,0 +1,81 @@
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: ./docker/production/nginx/Dockerfile
+    restart: unless-stopped
+    volumes:
+      - laravel-storage-production:/var/www/storage:ro
+      - laravel-public-assets:/var/www/public/build:ro
+    networks:
+      - laravel-and-echo
+    ports:
+      - "8080:80"
+    depends_on:
+      php-fpm:
+        condition: service_healthy
+      go:
+        condition: service_started
+  php-fpm:
+    build:
+      context: .
+      dockerfile: ./docker/production/php-fpm/Dockerfile
+    restart: unless-stopped
+    volumes:
+      - laravel-public-assets:/var/www/public/build
+      - laravel-storage-production:/var/www/storage
+    networks:
+      - laravel-and-echo
+    healthcheck:
+      test: ["CMD-SHELL", "php-fpm-healthcheck || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      - pgbouncer
+  go:
+    build:
+      context: .
+      dockerfile: ./docker/production/go/Dockerfile
+    restart: unless-stopped
+    networks:
+      - laravel-and-echo
+    depends_on:
+      - pgbouncer
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    user: postgres
+    networks:
+      - laravel-and-echo
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - postgres-data-production:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+  pgbouncer:
+    image: bitnami/pgbouncer:latest
+    restart: unless-stopped
+    networks:
+      - laravel-and-echo
+    environment:
+      - PGBOUNCER_PORT=6432
+      - POSTGRESQL_HOST=postgres
+      - POSTGRESQL_DATABASE=postgres
+      - POSTGRESQL_USERNAME=postgres
+      - POSTGRESQL_PASSWORD=password
+    depends_on:
+      postgres:
+        condition: service_healthy
+networks:
+  laravel-and-echo:
+volumes:
+  postgres-data-production:
+  laravel-storage-production:
+  laravel-public-assets:

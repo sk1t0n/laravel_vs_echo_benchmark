@@ -1,0 +1,13 @@
+.git/
+**/.gitignore
+**/.gitattributes
+
+.dockerignore
+docker-compose.yml
+**/Dockerfile
+
+laravel/node_modules/
+laravel/vendor/
+laravel/tests/
+laravel/phpunit.xml
+laravel/phpunit.xml.dist
