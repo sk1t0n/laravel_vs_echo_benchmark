@@ -24,4 +24,4 @@ docker-compose down --volumes
 
 ## Conclusion
 
-Golang is on average 47.5 times faster than PHP in terms of RPS on a €5/month VPS.
+Echo is on average 47.5 times faster than Laravel in terms of RPS on a €5/month VPS.
